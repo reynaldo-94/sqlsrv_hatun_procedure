@@ -158,7 +158,7 @@ BEGIN
                             INSERT INTO SGF_Solicitud(SolicitudId,BancoId,PersonaId,FechaSolicitud,MonedaId,FrecuenciaPagoId,MontoPropuesto,MontoMaterialPro,MontoEfectivoPro,EstadoSolicitudId,UserIdCrea,FechaCrea)                     
                             VALUES(@SolicitudId,@BancoId,@PersonaId,dbo.getdate(),1,3,@MontoPropuesto,@MontoMaterialPro,@MontoEfectivoPro,1,@UserIdActua,dbo.getdate())                     
                                             
-                            UPDATE SGF_ExpedienteCredito                     
+                            UPDATE SGF_ExpedienteCredito
                             SET SolicitudId=@SolicitudId,             
                                 Obra=@Obra              
                             WHERE ExpedienteCreditoId=@ExpedienteCreditoId                     
