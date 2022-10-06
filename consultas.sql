@@ -1,279 +1,227 @@
-select top(10) * from SGF_Solicitud order by solicitudId desc
+SELECT TOP(10) IdSupervisor,ProveedorId, * FROM SGF_ExpedienteCredito 
+ORDER BY ExpedienteCreditoId DESC
 
---tickets
-SELECT RegionZonaId, * FROM SGF_PedidoCambio
-select * from sgf_parametro where dominioid = 27
+select FechaDescarga, *
+from sgf_expedientecredito
+where ExpedienteCreditoId IN (707256,707515,707390)
 
-select DocumentoNum,* from sgf_persona where PersonaId = 267537
-select bancoId,FechaCrea,FechaActua,DispositivoId, * from sgf_Expedientecredito where titularId = 267537
-order by expedientecreditoid desc
+UPDATE sgf_expedientecredito
+SET FechaDescarga = null
+where ExpedienteCreditoId IN (707256,707515,707390)
 
-select top(10) FechaCrea,TitularId, IdOficina, * from sgf_Expedientecredito 
-order by expedientecreditoid desc
-where bancoId = 11 order by expedientecreditoid desc
-select DocumentoNum, EstadoCivilId,Telefonos, * from sgf_persona where personaId in (608459)
+SP_HELPTEXT SGC_SP_ExpedienteCredito_L
+EXEC SGC_SP_ProveedorLocal_G 297,''
 
-select * from sgf_persona where documentonum = '41817048'
-select * from sgf_persona where documentonum = '41817048'
+EXEC 
+
+SELECT       
+   PL.IdSupervisor, SP.AdvId, SP.ZonaId,SP.LocalId   
+ FROM SGF_ProveedorLocal PL   
+ INNER JOIN SGF_Supervisor SP ON SP.IdSupervisor = PL.IdSupervisor    
+ WHERE ProveedorLocalId=297  
+
+ select * from SGF_ProveedorLocal where ProveedorLocalId = 297    
+
+ SP_HELPTEXT SGC_SP_Reconfirmations_File_Upload_G
+
+ select * from SGF_ExpedienteCredito_Reconfirmacion
+
+ select TitularId, * from sgf_expedientecredito where ExpedienteCreditoId = 701968
+
+ select FechaReconfirmacion,FechaCrea,Estado, * from SGF_ExpedienteCredito_Reconfirmacion where ExpedienteCreditoId = 701968
+
+ update SGF_ExpedienteCredito_Reconfirmacion
+ set FechaReconfirmacion = dbo.getDate(),Estado = 2
+  where ExpedienteCreditoId = 701968
+
+ update SGF_ExpedienteCredito_Reconfirmacion
+ set FechaReconfirmacion = NULL,Estado = 1
+  where ExpedienteCreditoId = 707478
+
+  SP_HELPTEXT SGC_SP_Reconfirmations_File_Upload_G
 
 
-select * from sgf_datoslaborales where personaid = 267537
+update SGF_ExpedienteCredito_Reconfirmacion 
+set 
 
--- Oficina son las agencia
-select * from sgf_oficina where agenciaId = 93
-select * from sgf_oficina_ubigeo
+select top(10) * from SGF_ExpedienteCredito
+where EstadoProcesoId = 5
+ order by ExpedienteCreditoId desc
 
--- Agencias son las zonas
-select * from sgf_agencia
+select dbo.FN_Aniadir_DiasLaborables('2022-09-26 09:51:28.027', 5)
+
+exec 
+
+DELETE FROM SGF_ExpedienteCredito_Reconfirmacion WHERE ExpedienteCreditoId = 701968 and Lote = 11
+
+select exc.EstadoExpedienteId, exr.Estado,exc.ExpedienteCreditoId,exc.EstadoProcesoId,max(exr.FechaCrea) as FechaCrea ,exr.Interesado,max(exr.Lote) as Lote
+FROM SGF_ExpedienteCredito exc               
+INNER JOIN SGF_Evaluaciones eva ON exc.ExpedienteCreditoId = eva.ExpedienteCreditoId               
+LEFT JOIN SGF_ExpedienteCredito_Reconfirmacion exr ON exc.ExpedienteCreditoId = exr.ExpedienteCreditoId               
+WHERE exc.ExpedienteCreditoId in (707601,701968,631629)            
+GROUP BY exc.EstadoExpedienteId, exr.Estado,exc.ExpedienteCreditoId,exc.EstadoProcesoId,exr.Interesado  
+HAVING exr.Lote
+order by exr.FechaCrea DESC
+
+select exc.ExpedienteCreditoId,max(exr.FechaCrea),max(exr.Lote)
+FROM SGF_ExpedienteCredito exc               
+INNER JOIN SGF_Evaluaciones eva ON exc.ExpedienteCreditoId = eva.ExpedienteCreditoId               
+LEFT JOIN SGF_ExpedienteCredito_Reconfirmacion exr ON exc.ExpedienteCreditoId = exr.ExpedienteCreditoId               
+WHERE exc.ExpedienteCreditoId in (707601,701968,631629)      
+GROUP BY exc.ExpedienteCreditoId
 
 
-select * from sgf_datosdireccion where personaid = 267537
+select pr.DocumentoNum, ex.ExpedienteCreditoId,ex.UserIdCrea,ex.IdSupervisor,pr.IdSupervisor,us.Nombres, us.CargoId,rl.RolDes,ex.ProveedorId, pl.NombreComercial,pl.IdSupervisor,sp.Nombre, ex.FechaCrea
+from sgf_expedientecredito ex
+INNER JOIN SGF_Persona pr ON ex.TitularId = pr.PersonaId
+LEFT JOIN SGF_USER us ON ex.UserIdCrea = us.UserId
+LEFT JOIN SGF_Rol rl ON us.CargoId = rl.RolId
+LEFT JOIN SGF_ProveedorLocal pl ON ex.ProveedorId = pl.ProveedorLocalId
+LEFT JOIN SGF_Supervisor sp ON pl.IdSupervisor = sp.IdSupervisor
+where pr.DocumentoNum IN
+('09893686','08676042','25796733','10480046','44566664','72564557','47649181') 
+and ex.IdSupervisor = 1137
+order by pr.DocumentoNum asc
 
-select * from sgf_agencia where bancoId = 11
-select * from sgf_oficina where agenciaId = 215
-select * from sgf_oficina_ubigeo where idAgencia = 215
+select * from SGF_Persona where DocumentoNum = '06003405'
+
+9893686
+8676042
+25796733
+10480046
+44566664
+72564557
+47649181
+
+select AdvId, IdSupervisor,ProveedorId, * from SGF_ExpedienteCredito where ExpedienteCreditoId = 995070
+
+select IdSupervisor, * from SGF_ProveedorLocal where ProveedorLocalId = 1673
 
 
-select * from sgb_banco
 
-599290
-378606
-608461
-608454
-608453
-608449
-608448
-212761
-212761
-608444
+SELECT DispositivoId, CanalVentaId,UserIdCrea,FechaCrea, * FROM SGF_ExpedienteCredito WHERE ExpedienteCreditoId = 959193
 
-707364
-707358
+select UserIdCrea,FechaCrea,CanalVentaID,ProveedorId, * from SGF_ExpedienteCredito where CanalVentaID = 12 ORDER BY ExpedienteCreditoId DESC
 
-select top(10) titularId,BancoId,FechaCrea, * from sgf_expedientecredito order by expedientecreditoid desc
-select * from sgf_persona where PersonaId = 608462
-select * from SGF_DatosDireccion where PersonaId = 608462
 
-SELECT * FROM SGF_OFICINA
-select * from sgf_oficina_ubigeo
-select * from sgb_banco
 
-SELECT * 
-FROM sgf_oficina_ubigeo ou
-INNER JOIN SGF_OFICINA ofc on ou.IdOficina = ofc.IdOficina
+-- UPDATE sgf_expedientecredito
+-- SET IdSupervisor = 1137
+-- where ExpedienteCreditoId IN (
+-- 996642,995070,997363,996959,998322,999633,998746)
 
-select tipoCredito,bancoId,FechaCrea, * from sgf_expedientecredito where bancoId = 11 and tipoCredito = '' order by expedientecreditoid desc
+-- 996642,995070,997363,996959,998322,999633,998746
 
-select EstadoProcesoId from sgf_expedientecredito where tipoCredito = '' 
-group by EstadoProcesoId
-order by expedientecreditoid desc
 
-select tipoCredito, * from sgf_expedientecredito where expedientecreditoid = 707267
+-- UPDATE sgf_expedientecredito
+-- SET IdSupervisor = 1260
+-- where ExpedienteCreditoId = 995049
 
-select FechaCrea,DispositivoId, CanalVentaId, * from sgf_expedientecredito where estadoProcesoId = 1 order by expedientecreditoid desc
+995049
 
-select * from s
+SP_HELPTEXT SGC_SP_Reconfirmacion_Banco_L_Reporte  
 
+SELECT * FROM SGF_USER WHERE EmailEmpresa like '%soporte%'
+
+select TitularId, *
+from SGF_ExpedienteCredito
+where ExpedienteCreditoId = 1000799
+
+select Nombre, * from SGF_Persona where PersonaId IN (693941,830421)
+
+select * from SGF_DatosLaborales where PersonaId = 693941
+
+select * from SGF_ExpedienteCreditoDetalle where ExpedienteCreditoId = 1000799
+
+SP_HELPTEXT SGC_SP_Proveedor_Local_U
+
+SELECT * FROM SGF_Evaluaciones where ExpedienteCreditoId = 1000799
+
+-- UPDATE SGF_Persona
+-- SET Nombre = 'MARIA', ApePaterno = 'QUEZADA', ApeMaterno = 'MORALES', DocumentoNum = '46512498'
+-- WHERE PersonaId = 830421
+
+-- UPDATE SGF_ExpedienteCreditoDetalle
+-- SET Observacion = 'SE AGREGÓ CÓNYUGE: YEIMI LISBETH RIVERA CONDOR'
+-- WHERE ExpedienteCreditoId = 1000799 AND ItemId = 3
+
+-- UPDATE SGF_Evaluaciones 
+-- SET PersonaId = 782038
+-- WHERE ExpedienteCreditoId = 1000799 AND PersonaId = 830421
+
+select BancoId, FechaCrea,FechaActua,CanalVentaID,DispositivoId,EstadoProcesoId, 
+* from sgf_expedientecredito where TitularId = 798530
+
+-- 732 con Solicitud
+-- 708 con banco id y solicidtud
+-- 
+
+select ex.SolicitudId, ex.FechaCrea,ex.FechaActua,ex.CanalVentaID,ex.DispositivoId,ex.EstadoProcesoId, sl.BancoId
+from SGF_ExpedienteCredito as ex
+inner join SGF_Solicitud as sl on ex.SolicitudId = sl.SolicitudId
+where ex.BancoId = 0 and ex.SolicitudId <> 0 and sl.BancoId = 0
+order by ex.expedienteCreditoId desc
+
+select BancoId, * from SGF_ExpedienteCredito where BancoId = 0 order by ExpedienteCreditoId desc
+
+update SGF_ExpedienteCredito 
+set BancoId = 11
+where SolicitudId IN (260081,259541,258239,257708,256223)
+
+select BancoId, * from SGF_ExpedienteCredito where SolicitudId in (260081,259541,258239,257708,256223)
+
+select * from SGF_Solicitud where SolicitudId = 264859
+
+-- 6099
+
+update SGF_ExpedienteCredito 
+set BancoId = 3
+where ExpedienteCreditoId in (
+  SELECT ExpedienteCreditoId from SGF_ExpedienteCredito where BancoId = 0
+)
+
+
+select * from SGF_Persona where DocumentoNum = '40261109'
+
+select * from SGF_Evaluaciones where PersonaId = 782038
+
+select TitularId,CanalVentaID,FechaCrea, * from SGF_ExpedienteCredito where ExpedienteCreditoId = 1000394
+select TipoPersonaId,FechaCrea, * from SGF_Persona where PersonaId = 109448
+select * from SGF_DatosDireccion where PersonaId = 109448
+
+select * from sgf_dominio where Nombre like '%Canal%'
+select * from SGF_Parametro where DominioId = 45
+
+SP_HELPTEXT SGC_TOKEN
+
+select * from sgf_rol_pagina
+
+select * from sgf_pagina
+
+select * from sgf_rol 
+
+select * from SGF_Supervisor
+select * from SGF_Local
+
+
+select lc.NombreCorto, lc.Descripcion, * 
+from SGF_Supervisor as sp
+inner join sgf_local as lc on sp.LocalId = lc.LocalId
 
 select * from 
 
-select top(10) * from sgf_expedientecredito order by expedientecreditoid desc
-select * from sgf_persona where personaId = 608471
+SP_HELPTEXT SGF_SP_Reconfirmacion_I_Movil
 
-select * from sgf_oficina_ubigeo where codUbigeo = 150135
+SELECT * FROM SGF_ExpedienteCredito_Reconfirmacion WHERE ESTADO = 1 ORDER BY ExpedienteCreditoId DESC
 
-select bancoId,solicitudid,idoficina,FechaActua, * from sgf_Expedientecredito where expedientecreditoid = 707332
-select bancoId,idoficina, * from sgf_solicitud where solicitudid = 382038
+SELECT EXPER.ExpedienteCreditoId, EXPCRED.IdSupervisor
+FROM dbo.SGF_ExpedienteCredito_Reconfirmacion EXPER                     
+INNER JOIN dbo.SGF_ExpedienteCredito EXPCRED on EXPCRED.ExpedienteCreditoId = EXPER.ExpedienteCreditoId           
+INNER JOIN dbo.SGF_Persona PER on PER.PersonaId = EXPCRED.TitularId                       
+WHERE EXPER.Estado = 1
 
-select * from sgf_canal
--- SCRIPT DE BANCOS CON 0 CMABIAR , SE MODIFICO EL PROCEDIMIENTO, DERIVE E INSERT DETAIL, TAMBIEN CREAR TARJETAS -----
-select us.CargoId, ex.canalVentaId, ex.FechaCrea,ex.FechaActua,ex.UserIdCrea,ex.BancoId,ex.DispositivoId,ex.EstadoProcesoId,ex.TipoCredito,ex.FechaProspecto,ex.FechaNocalifica,ex.SolicitudId, * 
-from sgf_expedientecredito ex
-inner join sgf_user us on ex.UserIdCrea = us.UserId
--- inner join sgf_persona pr on ex.titularId = pr.PersonaId
-where ex.bancoId = 0 and ex.userIdCrea != 0
-order by ex.expedientecreditoid desc
+EXEC SGC_SP_ExpedienteCredito_Reconfirmados_L 1209,1,0,20,0
 
-select emailempresa,CargoId, * from sgf_user where UserId in (2950,12008,3597,4096,3171)
+select top(100) diaLlamada, * from SGF_Persona order by PersonaId desc
 
-select * from sgf_rol where rolId in (29,11)
-
-select canalVentaId
-from sgf_expedientecredito
-where bancoId = 0
-group by canalVentaId
-
-select DispositivoId, EstadoProcesoId,FechaCrea,BancoId, categoriaId,TipoCredito, * 
-from sgf_expedientecredito
-where estadoProcesoId = 1zz
-order by ExpedienteCreditoId DESC
-
-select * from sgf_persona where DocumentoNum = '25711409's
-
-select top(40) DispositivoId, EstadoProcesoId,FechaCrea,BancoId,categoriaId,TipoCredito, * 
-from sgf_expedientecredito
-where estadoProcesoId = 2
-order by ExpedienteCreditoId DESC
-
-select * from sgf_persona where personaId in (537538,255837,714521,303196,679346,509308,739267,452257,780209)
-select * from sgf_persona where personaId in (780738, 780737, 780736, 780735, 780732, 780731, 714180, 780729, 780725)
-
-
-select top(10) * from sgf_persona where personaId =780033 order by personaId desc
-
-select top(10) * from SGF_DatosLaborales order by personaId desc
-select top(2)  FechaCrea,FechaActua,BancoId,DispositivoId, EstadoProcesoId,TipoCredito,FechaProspecto,FechaNocalifica,SolicitudId, * from sgf_expedientecredito where bancoId = 11
-order by expedientecreditoid desc
-select top(10) UserIdCrea,UserIdActua, FechaCrea,FechaActua,BancoId,DispositivoId, EstadoProcesoId,IsBancarizado,TipoCredito, * from sgf_expedientecredito 
--- where BancoId = 0
-order by expedientecreditoid desc
-
-select * from SGF_ExpedienteCredito
-
-select bancoId, * from sgf_expedientecredito where expedientecreditoid = 707329
-
-declare @search varchar(50)
-SET @search = 'SGF_ExpedienteCredito'
-
-SELECT 
-ROUTINE_NAME
-,ROUTINE_DEFINITION
-FROM 
-INFORMATION_SCHEMA.ROUTINES
-WHERE 
-ROUTINE_DEFINITION LIKE '%' + @search + '%'
-AND ROUTINE_TYPE ='PROCEDURE'
-ORDER BY
-ROUTINE_NAME
-
-select * from sgf_solicitud where 
-
-select top(10) ex.expedientecreditoid, pr.PersonaId,
-case when ofu.IdDerivacion is null then 0 else 1 end  as HabilitarSurgir
-from sgf_expedientecredito ex
-inner join sgf_persona pr on ex.titularId = pr.personaId
-inner join SGF_DatosDireccion dd on pr.PersonaId = dd.personaId
-left join sgf_oficina_ubigeo ofu on dd.Ubigeo = ofu.CodUbigeo
-where ex.BancoId = 3 
-order by expedientecreditoid desc
-
-EXEC SGC_SP_ExpedienteCredito_Por_Id 707364
-
-select bancoId,FechaCrea,DispositivoId,FechaActua, * from sgf_expedientecredito where titularid = 267537
-
-select * from sgf_Evaluaciones where expedientecreditoId = 921560
-
-update sgf_Expedientecredito set estadoProcesoId = 2 where expedientecreditoId = 707355
-
-select emailempresa, * from sgf_user where emailempresa like '%sco%'
-
-       select * from sgf_ubigeo where nombre like '%huachip%'
-       select bancoId, * from sgf_expedientecredito where bancoId = 11
-update sgf_expedientecredito set bancoId = 11  where bancoid = 8
-select * from sgb_banco
-
-select EstadoProcesoId, * from sgf_expedientecredito where expedientecreditoid = 906176
-
-select *from sgf_solicitud limit 5
-
-update sgf_expedientecredito set FechaDescarga = null where expedientecreditoid = 707220
-
-select * from sgf_ubigeo where codprov = '01' and coddpto = 07
-
-select * from sgf_ubigeo where codprov = '01' and coddpto = 15
-order by nombre asc
-
-select * from sgb_banco
-update sgb_banco set bancoId = 11  where bancoid = 8
-
-select solicitudid, * from sgf_expedientecredito where ExpedienteCreditoId = 903562;
-
-select * from SGF_Evaluaciones where ExpedienteCreditoId = 903562;
-
-select * from SGF_ExpedienteCreditoDetalle where ExpedienteCreditoId = 903562;
-
-update sgf_expedientecredito set EstadoProcesoId = 12 where ExpedienteCreditoId = 775923
-
-select * from sgf_solicitud
-
-select * from sgb_banco
-select * from sgf_user where cargoId = 27
-
-select * from sgf_AsistenteConvenio
-
-update sgf_AsistenteConvenio set bancoId = 11  where bancoid = 8
-
-
-Select DIST.CodUbigeo [Id],                                                              
-                PROV.Nombre + '-' + DIST.Nombre [Name], dist.codprov, dist.coddpto                                                       
-         From SGF_UBIGEO DIST                                                              
-         OUTER APPLY (SELECT Nombre FROM SGF_UBIGEO PROV                                                              
-                      WHERE PROV.CodUbigeo = SUBSTRING(DIST.CodUbigeo,1,4) + '00') PROV                                                             
-         Where DIST.CodDpto<>00 and DIST.CodProv<>00 and DIST.CodDist<>00 and PROV.Nombre like '%lima%'
-
-SP_hELPTEXT sgc_token
-
-SELECT BancoId, * FROM SGF_ExpedienteCredito WHERE ExpedienteCreditoId = 707333
-
-select * from sgb_banco
-
-select top(10) FechaCrea, FechaAtendio, FechaActua, EstadoPedido, * from SGF_PedidoCambio
-where estadopedido = 2
-
-select  TOP(10) Horario,DiaLlamada, * from sgf_persona order by personaid desc
-
-
-select top(10) BancoId, * from SGF_ExpedienteCredito
-order by ExpedienteCreditoId desc
-
-select titularId, * from SGF_ExpedienteCredito where ExpedienteCreditoId = 707183
-select Horario,DiaLlamada, * from sgf_persona where personaid = 598372
-select  * from SGF_DatosLaborales where personaid = 598372
-update sgf_persona set DiaLlamada = '1,3' where personaId = 607065
-
-update sgf_persona set Horario = ''
-
--- Responsable id vinculado con userId
-ALTER TABLE SGF_PedidoCambio
-ADD ResponsableId int(50) not null
-
-responsableid, pasoid, isAtendio
-id, id, 0
-
--- Problemas de Salud : RRHH va a responsable Id
-
-SELECT * FROM SGF_PEDIDODETALLE
-
-select EstadoPedido from SGF_PedidoCambio
-group by EstadoPedido
-
-select * from SGF_dominio where dominioid = 
-
-select convert(varchar, pc.FechaCrea, 5) as FechaCrea, pr1.NombreCorto as Solicitud, rz.Nombre as Solicitante, 'Operaciones' as Responsable, pr2.ParametroId as IdEstado, pr2.NombreLargo as NomEstado
-from SGF_PedidoCambio pc
-inner join SGF_Parametro pr1 on pc.TipoCambioId = pr1.ParametroId and pr1.DominioId = 52  and pr1.ParametroId = 1
-inner join SGF_Parametro pr2 on pc.EstadoPedido = pr2.ParametroId and pr2.DominioId = 127
-inner join SGF_JefeRegional rz ON pc.RegionZonaId = rz.RegionId
-where pr.DominioId = 52  and pr.ParametroId = 1
-
-SELECT * FROM sgf_regionzona
-SELECT * FROM SGF_JefeRegional
-select *from sgf_user where userod = 
-
-select * from sgf_user where useridcrea = 40
-
-select * from SGF_Parametro where DominioId = 52
-
-update SGF_Parametro set IndicadorActivo = 1 where DominioId = 52 and ParametroId = 1
-
-SELECT * FROM SGF_dominio where nombre like '%pedido%'
-
-select * from SGF_dominio where DominioId = 52
-select * from sgf_param
-
-select JefeZonaId from SGF_JefeZona where zonaid = 1
-
-SP_HELPTEXT sp_get_list_master
-
-
-select * from 
+select * from SGF_ExpedienteCredito_Reconfirmacion where IdReconfirmacion = 3358
