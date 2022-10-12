@@ -225,3 +225,22 @@ EXEC SGC_SP_ExpedienteCredito_Reconfirmados_L 1209,1,0,20,0
 select top(100) diaLlamada, * from SGF_Persona order by PersonaId desc
 
 select * from SGF_ExpedienteCredito_Reconfirmacion where IdReconfirmacion = 3358
+
+SP_HELPTEXT sp_get_list_master
+
+
+
+update sgf_expedientecredito
+set FechaDescarga = null
+where ExpedienteCreditoId = 706123
+
+select * from sgf_parametro where DominioId = 130
+
+
+select * from sgf_parametro where DominioId = 90
+
+select sp.ParametroId Id,          
+               sp.NombreLargo Name                                                     
+        from SGF_Parametro sp                          
+        inner join SGF_Dominio sd on sp.DominioId = sd.DominioId                                                               
+        where sd.DominioId = 130 and sp.IndicadorActivo  = 1      
