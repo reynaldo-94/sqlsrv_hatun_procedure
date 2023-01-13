@@ -207,9 +207,10 @@ select * from sgf_pagina
 
 select * from sgf_rol 
 
-select * from SGF_Supervisor
+select * from SGF_Supervisor where IdSupervisor = 1205
 select * from SGF_Local
 
+select EmailEmpresa, * from sgf_user where EmpleadoId = 1205
 
 select lc.NombreCorto, lc.Descripcion, * 
 from SGF_Supervisor as sp
@@ -564,4 +565,133 @@ SELECT COUNT(EXPER.ExpedienteCreditoId)-1
                     INNER JOIN dbo.SGF_Persona PER on PER.PersonaId = EXPCRED.TitularId                                   
                     WHERE (EXPCRED.IdSupervisor = 1161 and EXPER.Estado = 2)
 
-select* from sgf_evaluaciones where expedientecreditoid = 707288
+select* from sgf_evaluaciones where expedientecreditoid = 707984
+select CodUbigeo from SGF_UBIGEO where CodDpto='04'
+
+select ex.EstadoExpedienteId,ex.EstadoProcesoId,ex.ExpedienteCreditoId,ex.IdSupervisor, * 
+from sgf_persona  as p
+inner join SGF_ExpedienteCredito as ex on p.PersonaId = ex.TitularId
+where p.DocumentoNum = '43069088'
+
+update sgf_Expedientecredito
+set EstadoExpedienteId = 2
+where ExpedienteCreditoId = 722060
+
+sgf_expedientecredito
+
+select * from SGF_ExpedienteCreditoDetalle where ExpedienteCreditoId = 722060
+
+select STRING_AGG(PersonaId,',') as PersonaId from sgf_evaluaciones where ExpedienteCreditoId = 708075
+
+select dl.DatosLaboralesId
+from sgf_Evaluaciones as ev
+inner join SGF_DatosLaborales as dl on ev.PersonaId = dl.PersonaId
+where ev.ExpedienteCreditoId = 708075
+
+select * from SGF_DatosLaborales where PersonaId IN (608881,608937,608939)
+
+se
+
+select * from dbo.FN_StrToTable('608881,608937,608939',',')
+
+select STRING_AGG('608881,608937,608939',',')
+
+select * from SGF_DatosDireccion sdd where sdd.PersonaId = 608937
+
+SELECT PersonaId,GiroId, * FROM SGF_DatosLaborales WHERE DatosLaboralesId in (1044059,1044061,1044077)
+
+  update SGF_DatosLaborales 
+  set GiroId = 0
+  WHERE DatosLaboralesId = 1044059
+
+  1044059
+1044061
+1044077
+
+
+SELECT isnull(count(ISNULL(dd.Direccion,0)),0)
+from SGF_DatosLaborales dl
+inner join SGF_DatosDireccion dd on dl.PersonaId = dd.PersonaId
+WHERE DatosLaboralesId = 1044059
+
+select * from SGF_DatosDireccion where PersonaId = 608937
+
+update SGF_DatosDireccion
+set Ubigeo = 150132
+where  Ubigeo = '' 
+
+select * from SGF_DatosDireccion where Ubigeo = ''
+
+select isnull(count(ISNULL(sdd.Direccion,0)),0) from SGF_DatosDireccion sdd where sdd.PersonaId = 608937
+(select isnull(count(ISNULL(sdd.Ubigeo,0)),0) from SGF_DatosLaborales dl INNER JOIN SGF_DatosDireccion sdd ON dl.PersonaId = sdd.PersonaId where dl.DatosLaboralesId = 1044059) 
+
+SELECT dd.DocumentoNum
+from SGF_DatosLaborales dl
+inner join SGF_PERsona dd on dl.PersonaId = dd.PersonaId
+WHERE DatosLaboralesId = 1044059
+
+exec SGC_SP_ExpedienteCredito_Gestion_Derivar_Solicitud 708075,0,'',''
+
+
+select              
+     su.UserId,              
+     ISNULL(su.Nombres, '') + ' ' +          
+      ISNULL(su.ApePaterno, '') + ' ' +          
+      ISNULL(su.ApeMaterno, '') as Name,            
+     sr.RolId,              
+     sr.RolDes,              
+     0 LocalId,              
+     sjz.ZonaId,              
+     su.EmpleadoId,     
+     su.EmailEmpresa   ,
+  -- ISNULL(@listVioTutorialId, '') as listaVioTutorialId,  
+  0 as BancoId, 
+  '' as LocalName 
+    from              
+     SGF_USER su              
+    inner join              
+     SGF_ROL sr               
+    on              
+     su.CargoId = sr.RolId               
+    inner join              
+     SGF_JefeZona sjz               
+    on              
+     sjz.JefeZonaId = su.EmpleadoId              
+    where              
+     LOWER(su.EmailEmpresa) like  '%leonel.%';     
+
+     select su.CargoId,su.EmailEmpresa  from SGF_USER su where su.EmailEmpresa like  '%cabrera%'
+
+     select STRING_AGG(dl.DatosLaboralesId,',') 
+        from sgf_Evaluaciones as ev 
+        inner join SGF_DatosLaborales as dl on ev.PersonaId = dl.PersonaId 
+        where ev.ExpedienteCreditoId = 707759
+
+    SELECT * FROM SGF_Evaluaciones where ExpedienteCreditoId = 708141
+
+
+    select ruc, * from SGF_DatosLaborales where PersonaId in (609014)
+    update SGF_DatosLaborales
+    set ruc = '01234567891'
+    where PersonaId in (609014)
+
+    (select isnull(count(ISNULL(Ruc,0)),0) from SGF_DatosLaborales where DatosLaboralesId = 1044116)  
+
+
+     exec SGC_TOKEN 'ROBERTO.MENDOZA@HATUN.COM.PE'
+
+     SP_HELPTEXT SGC_TOKEN
+
+Select *                        
+from SGF_Agencia ac                                    
+WHERE ac.BancoId = 3 AND                           
+ac.Activo = 1
+
+exec sp_get_list_master 3,31,0,0,0
+
+select * from sgf_oficina where AgenciaId = 215
+
+select ag.AgenciaId, o.IdOficina, O.Nombre
+from sgf_agencia as ag
+inner join sgf_oficina as o on ag.AgenciaId = o.AgenciaId
+where ag.BancoId = 11 and ag.Activo  = 1

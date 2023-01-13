@@ -69,7 +69,7 @@ BEGIN
     declare @DatosDireccionTrabajoId int                            
     declare @TipoDireccionTrabajoId int 
     DECLARE @BancoId int                  
- declare @ItemId int                     
+    declare @ItemId int                     
     BEGIN TRY                              
         BEGIN TRANSACTION                              
                                    
@@ -80,125 +80,125 @@ BEGIN
         SET @BancoId = (SELECT BancoId FROM SGF_ExpedienteCredito WHERE ExpedienteCreditoId = @ExpedienteCreditoId);                       
                                     
         if(@PersonaId<>0)                            
-        begin                            
-            UPDATE SGF_Persona                            
-            SET Nombre=@Nombre,               
-                ApePaterno=@ApePaterno,                            
-                ApeMaterno=@ApeMaterno,                            
-                Telefonos=@Telefonos,                            
-                Celular=@Celular,                            
-                Celular2=@Celular2,                            
-                EstadoCivilId=@EstadoCivilId,                
-                Correo=@Correo,                            
-                CasaPropia=@CasaPropia,           
-                DiaLlamada=@DiaLlamada,           
-                Horario=@Horario                            
-     where PersonaId=@PersonaId                            
-        end                            
+            begin                            
+                UPDATE SGF_Persona                            
+                SET Nombre=@Nombre,               
+                    ApePaterno=@ApePaterno,                            
+                    ApeMaterno=@ApeMaterno,                            
+                    Telefonos=@Telefonos,                            
+                    Celular=@Celular,                            
+                    Celular2=@Celular2,                            
+                    EstadoCivilId=@EstadoCivilId,                
+                    Correo=@Correo,                            
+                    CasaPropia=@CasaPropia,           
+                    DiaLlamada=@DiaLlamada,           
+                    Horario=@Horario                            
+                where PersonaId=@PersonaId                            
+            end                            
                                    
         if(@DatosDireccionId=0)                            
-        begin                            
-         set @DatosDireccionId=(Select max(DatosDireccionId)+1 from SGF_DatosDireccion)                            
-            INSERT INTO SGF_DatosDireccion(DatosDireccionId,PersonaId,TipoDireccionId,Correspondencia,Direccion,Referencia,Ubigeo,EsFijo)                            
-            values(@DatosDireccionId,@PersonaId,1,1,@Direccion,@Referencia,@Ubigeo,1)                            
-        end                            
+            begin                            
+                set @DatosDireccionId=(Select max(DatosDireccionId)+1 from SGF_DatosDireccion)                            
+                    INSERT INTO SGF_DatosDireccion(DatosDireccionId,PersonaId,TipoDireccionId,Correspondencia,Direccion,Referencia,Ubigeo,EsFijo)                            
+                    values(@DatosDireccionId,@PersonaId,1,1,@Direccion,@Referencia,@Ubigeo,1)                            
+            end                            
         else                            
-        begin                       
-            --set @DatosDireccionId=(Select top 1 DatosDireccionId from SGF_DatosDireccion where PersonaId=@PersonaId and TipoDireccionId=1)                           
-            UPDATE SGF_DatosDireccion                            
-            SET Direccion=@Direccion,                            
-           Referencia=@Referencia,                            
-                Ubigeo=@Ubigeo                            
-            WHERE DatosDireccionId=@DatosDireccionId                            
-        end                            
+            begin                       
+                --set @DatosDireccionId=(Select top 1 DatosDireccionId from SGF_DatosDireccion where PersonaId=@PersonaId and TipoDireccionId=1)                           
+                UPDATE SGF_DatosDireccion                            
+                SET Direccion=@Direccion,                            
+                    Referencia=@Referencia,                            
+                    Ubigeo=@Ubigeo                            
+                WHERE DatosDireccionId=@DatosDireccionId                            
+            end                            
                                    
         if(@DatosLaboralesId=0)                            
-        begin                            
-            set @DatosLaboralesId=(Select max(DatosLaboralesId)+1 from SGF_DatosLaborales)                            
-            INSERT INTO SGF_DatosLaborales   
-			(DatosLaboralesId,PersonaId,TipoTrabajoId,FormalidadTrabajoId,TipoEstablecimiento,NombreEstablecimiento,ActividadEconomicaId,GiroId,   
-			CentroTrabajo,SustentoIngresoId,Cargo,IngresoNeto,AntiguedadLaboral,DiasPago,Ruc)                        
-            values   
-			(@DatosLaboralesId,@PersonaId,@TipoTrabajoId,@FormalidadTrabajoId,'',@NombreEstablecimiento,0,@GiroId,   
-			@CentroTrabajo, @SustentoIngresoId,'',@IngresoNeto,@AntiguedadLaboral,@DiasPago,@RucEstablecimiento)                            
-        end                            
+            begin                            
+                set @DatosLaboralesId=(Select max(DatosLaboralesId)+1 from SGF_DatosLaborales)                            
+                INSERT INTO SGF_DatosLaborales   
+                (DatosLaboralesId,PersonaId,TipoTrabajoId,FormalidadTrabajoId,TipoEstablecimiento,NombreEstablecimiento,ActividadEconomicaId,GiroId,   
+                CentroTrabajo,SustentoIngresoId,Cargo,IngresoNeto,AntiguedadLaboral,DiasPago,Ruc)                        
+                values   
+                (@DatosLaboralesId,@PersonaId,@TipoTrabajoId,@FormalidadTrabajoId,'',@NombreEstablecimiento,0,@GiroId,   
+                @CentroTrabajo, @SustentoIngresoId,'',@IngresoNeto,@AntiguedadLaboral,@DiasPago,@RucEstablecimiento)                            
+            end                            
         else                       
-        begin                            
-            --set @DatosLaboralesId=(Select top 1 DatosLaboralesId from SGF_DatosLaborales where PersonaId=@PersonaId)                                 
-            UPDATE SGF_DatosLaborales                            
-            SET TipoTrabajoId=@TipoTrabajoId,                            
-                FormalidadTrabajoId=@FormalidadTrabajoId,   
-                NombreEstablecimiento=@NombreEstablecimiento,                           
-                Ruc=@RucEstablecimiento,                       
-                GiroId=@GiroId,                            
-                CentroTrabajo=@CentroTrabajo,                            
-                SustentoIngresoId=@SustentoIngresoId,                                           IngresoNeto=@IngresoNeto,                        
-                AntiguedadLaboral=@AntiguedadLaboral,                        
-                DiasPago=@DiasPago              
-            WHERE DatosLaboralesId=@DatosLaboralesId                            
-        end  
+            begin                            
+                --set @DatosLaboralesId=(Select top 1 DatosLaboralesId from SGF_DatosLaborales where PersonaId=@PersonaId)                                 
+                UPDATE SGF_DatosLaborales                            
+                SET TipoTrabajoId=@TipoTrabajoId,                            
+                    FormalidadTrabajoId=@FormalidadTrabajoId,   
+                    NombreEstablecimiento=@NombreEstablecimiento,                           
+                    Ruc=@RucEstablecimiento,                       
+                    GiroId=@GiroId,                            
+                    CentroTrabajo=@CentroTrabajo,                            
+                    SustentoIngresoId=@SustentoIngresoId,                                           IngresoNeto=@IngresoNeto,                        
+                    AntiguedadLaboral=@AntiguedadLaboral,                        
+                    DiasPago=@DiasPago              
+                WHERE DatosLaboralesId=@DatosLaboralesId                            
+            end  
   
         -- Cuando es RUC no actualizar    
         If(@DatosDireccionTrabajoId IS NULL AND Len(@DocumentoNum) != 11)                            
-        begin                            
-    set @DatosDireccionTrabajoId=(Select max(DatosDireccionId)+1 from SGF_DatosDireccion)                            
-            INSERT INTO SGF_DatosDireccion(DatosDireccionId,PersonaId,TipoDireccionId,Correspondencia,Direccion,Referencia,Ubigeo,EsFijo)         
-            values(@DatosDireccionTrabajoId,@PersonaId,@TipoDireccionTrabajoId,0,@DireccionTrabajo,@ReferenciaTrabajo,@UbigeoTrabajo,0)                            
-        end                            
+            begin                            
+                set @DatosDireccionTrabajoId=(Select max(DatosDireccionId)+1 from SGF_DatosDireccion)                            
+                    INSERT INTO SGF_DatosDireccion(DatosDireccionId,PersonaId,TipoDireccionId,Correspondencia,Direccion,Referencia,Ubigeo,EsFijo)         
+                    values(@DatosDireccionTrabajoId,@PersonaId,@TipoDireccionTrabajoId,0,@DireccionTrabajo,@ReferenciaTrabajo,@UbigeoTrabajo,0)                            
+                end                            
         Else                            
-        begin                            
-            UPDATE SGF_DatosDireccion                            
-            SET TipoDireccionId=@TipoDireccionTrabajoId,                            
-                Direccion=@DireccionTrabajo,                            
-                Referencia=@ReferenciaTrabajo,                            
-                Ubigeo=@UbigeoTrabajo                            
-          WHERE DatosDireccionId=@DatosDireccionTrabajoId                            
-        end                            
+            begin                            
+                UPDATE SGF_DatosDireccion                            
+                SET TipoDireccionId=@TipoDireccionTrabajoId,                            
+                    Direccion=@DireccionTrabajo,                            
+                    Referencia=@ReferenciaTrabajo,                            
+                    Ubigeo=@UbigeoTrabajo                            
+                WHERE DatosDireccionId=@DatosDireccionTrabajoId                            
+            end                            
                                    
         /*=== Registro solo para Titular del Crédito ===*/                            
         If (@TipoPersonaId=1)                 
-        Begin                            
-            If (@SolicitudId=0)                            
             Begin                            
-                set @SolicitudId=(select max(SolicitudId)+1 from SGF_Solicitud)                            
-                INSERT INTO SGF_Solicitud(SolicitudId,BancoId,PersonaId,FechaSolicitud,MonedaId,FrecuenciaPagoId,MontoPropuesto,MontoMaterialPro,MontoEfectivoPro,EstadoSolicitudId,UserIdCrea,FechaCrea)                            
-                VALUES(@SolicitudId,@BancoId,@PersonaId,dbo.getdate(),1,3,@MontoPropuesto,@MontoMaterialPro,@MontoEfectivoPro,1,@UserIdActua,dbo.getdate())                            
+                If (@SolicitudId=0)                            
+                    Begin                            
+                        set @SolicitudId=(select max(SolicitudId)+1 from SGF_Solicitud)                            
+                        INSERT INTO SGF_Solicitud(SolicitudId,BancoId,PersonaId,FechaSolicitud,MonedaId,FrecuenciaPagoId,MontoPropuesto,MontoMaterialPro,MontoEfectivoPro,EstadoSolicitudId,UserIdCrea,FechaCrea)                            
+                        VALUES(@SolicitudId,@BancoId,@PersonaId,dbo.getdate(),1,3,@MontoPropuesto,@MontoMaterialPro,@MontoEfectivoPro,1,@UserIdActua,dbo.getdate())                            
                                         
-                UPDATE SGF_ExpedienteCredito                            
-                SET SolicitudId=@SolicitudId,                    
-                    Obra=@Obra                     
-                WHERE ExpedienteCreditoId=@ExpedienteCreditoId                            
-            End                            
-            Else                               
-            Begin                            
-                --set @SolicitudId=(Select top 1 SolicitudId from SGF_ExpedienteCredito where ExpedienteCreditoId=@ExpedienteCreditoId)                         
-                UPDATE SGF_Solicitud                            
-                SET MontoPropuesto=@MontoPropuesto,                            
-                    MontoMaterialPro=@MontoMaterialPro,                            
-                    MontoEfectivoPro=@MontoEfectivoPro,                            
-                    UserIdActua=@UserIdActua,                            
-                    FechaActua=dbo.getdate(),         
-                    BancoId = IIF(@BancoId = 0, BancoId, @BancoId)         
-                WHERE SolicitudId=@SolicitudId                            
+                        UPDATE SGF_ExpedienteCredito                            
+                        SET SolicitudId=@SolicitudId,                    
+                            Obra=@Obra                     
+                        WHERE ExpedienteCreditoId=@ExpedienteCreditoId                            
+                    End                            
+                Else                               
+                    Begin                            
+                        --set @SolicitudId=(Select top 1 SolicitudId from SGF_ExpedienteCredito where ExpedienteCreditoId=@ExpedienteCreditoId)                         
+                        UPDATE SGF_Solicitud                            
+                        SET MontoPropuesto=@MontoPropuesto,                            
+                            MontoMaterialPro=@MontoMaterialPro,                            
+                            MontoEfectivoPro=@MontoEfectivoPro,                            
+                            UserIdActua=@UserIdActua,                            
+                            FechaActua=dbo.getdate(),         
+                            BancoId = IIF(@BancoId = 0, BancoId, @BancoId)         
+                        WHERE SolicitudId=@SolicitudId                            
                                         
-   UPDATE SGF_ExpedienteCredito                            
-                SET Obra=@Obra WHERE ExpedienteCreditoId=@ExpedienteCreditoId                            
-            End                            
-        End                    
+                        UPDATE SGF_ExpedienteCredito                            
+                        SET Obra=@Obra WHERE ExpedienteCreditoId=@ExpedienteCreditoId                            
+                    End                            
+            End                    
                     
-  UPDATE SGF_ExpedienteCredito                    
-  SET FechaActua = dbo.GETDATE(), BancoId = IIF(@BancoId = 0, BancoId, @BancoId)                  
-  WHERE ExpedienteCreditoId=@ExpedienteCreditoId                     
+        UPDATE SGF_ExpedienteCredito                    
+        SET FechaActua = dbo.GETDATE(), BancoId = IIF(@BancoId = 0, BancoId, @BancoId)                  
+        WHERE ExpedienteCreditoId=@ExpedienteCreditoId                     
                     
-  IF (@ObservacionMensaje != '')                  
-    BEGIN                  
-   SET @ItemId=(Select max(ItemId)+1 from SGF_ExpedienteCreditoDetalle WHERE ExpedienteCreditoId = @ExpedienteCreditoId)                  
-   INSERT INTO SGF_ExpedienteCreditoDetalle(ExpedienteCreditoId, ItemId, ProcesoId, Fecha, Observacion, UsuarioId)                  
-   VALUES(@ExpedienteCreditoId, @ItemId, @EstadoProcesoId, dbo.getdate(), @ObservacionMensaje, @UserIdActua)                  
- END                  
+        IF (@ObservacionMensaje != '')                  
+            BEGIN                  
+                SET @ItemId=(Select max(ItemId)+1 from SGF_ExpedienteCreditoDetalle WHERE ExpedienteCreditoId = @ExpedienteCreditoId)                  
+                INSERT INTO SGF_ExpedienteCreditoDetalle(ExpedienteCreditoId, ItemId, ProcesoId, Fecha, Observacion, UsuarioId)                  
+                VALUES(@ExpedienteCreditoId, @ItemId, @EstadoProcesoId, dbo.getdate(), @ObservacionMensaje, @UserIdActua)                  
+            END                  
                    
-    SET @Success = 1;                            
-   SET @Message = 'OK';                            
+        SET @Success = 1;                            
+        SET @Message = 'OK';                            
                                   
         COMMIT;                            
     END TRY                              

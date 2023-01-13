@@ -109,3 +109,5 @@ BEGIN
     ORDER BY EC.FechaEvaluacion desc   
     OFFSET IIF(@SinPaginado = 1, @Pagina * (IIF(@Success = 0, 1, @Success)), @Pagina * @Tamanio) ROWS FETCH NEXT IIF(@SinPaginado = 1, (IIF(@Success = 0, 1, @Success)), @Tamanio) ROWS ONLY   
 END
+
+-- exec SGC_SP_Derivaciones_Banco_Report_L_Web 10,2022,11,0,0,0,50,0,1,0 
