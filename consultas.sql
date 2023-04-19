@@ -196,16 +196,22 @@ select TitularId,CanalVentaID,FechaCrea, * from SGF_ExpedienteCredito where Expe
 select TipoPersonaId,FechaCrea, * from SGF_Persona where PersonaId = 109448
 select * from SGF_DatosDireccion where PersonaId = 109448
 
-select * from sgf_dominio where Nombre like '%Canal%'
-select * from SGF_Parametro where DominioId = 45
+select * from sgf_dominio where Nombre like '%Rechazo%'
+select * from SGF_Rechazo where DominioId = 26
 
 SP_HELPTEXT SGC_TOKEN
 
-select * from sgf_rol_pagina
+select * from sgf_rol_pagina where RoleId = 48
 
-select * from sgf_pagina
+insert into SGF_Rol_Pagina (RoleId, PageId) values (48,30)
 
-select * from sgf_rol 
+select * from sgf_pagina -- 48 Operaciones 
+insert into sgf_pagina(Nombre,Descripcion,ApplicationId,[Level],[Url],ParentPageId,Icon,Estado,[Order],OrderView)
+values ('Carga Respuesta de IF',null,1,2,'/dashboard/carga-respuesta-if',1,'developer_mode',1,6,2)
+
+select * from sgf_pagina where ParentPageId = 1
+
+select * from sgf_rol where RolDes like '%Operac%'
 
 select * from SGF_Supervisor where IdSupervisor = 1205
 select * from SGF_Local
@@ -252,6 +258,10 @@ select * from sgf_parametro where DominioId = 131 -- Interesado
 select * from sgf_parametro where DominioId = 133 -- Resultado
 select * from sgf_parametro where DominioId = 136 -- Motivo
 select * from sgf_parametro where DominioId = 140 order by NombreLargo asc -- SubMotivo
+
+select * from sgf_parametro where parametroid = 27
+
+select * from sgf_motivo
 
 update SGF_Parametro
 set ValorParam = 1
@@ -413,8 +423,16 @@ select BancoId,EstadoProcesoId,FechaCrea,FechaEvaluacion, * from sgf_expedientec
 )
 
 select top(50) BancoId, * from SGF_ExpedienteCredito
-where EstadoProcesoId = 5
+where ISNULL(FechaInforme, '') = ''
 order by ExpedienteCreditoId desc
+
+select * from sgf_es
+
+select * from SGF_Parametro where NombreCorto like '%RECHA%'
+
+SELECT * FROM SGF_Parametro WHERE DominioId = 38
+
+select * from SGF_ExpedienteCredito
 
 select * from SGF_ExpedienteCredito_Reconfirmacion where ExpedienteCreditoId = 707823
 
@@ -447,6 +465,9 @@ drop
   select EstadoProcesoId, * from SGF_ExpedienteCredito where ExpedienteCreditoId = 693816
   select * from SGF_ExpedienteCreditodetalle where ExpedienteCreditoId = 693816
 
+select EstadoProcesoId, * from SGF_ExpedienteCredito where ExpedienteCreditoId  in(708024,707886,708139)
+
+select * from SGF_Parametro where DominioId = 38
 
   SELECT ex.IdSupervisor, * 
   FROM SGF_ExpedienteCredito_Reconfirmacion er
@@ -695,3 +716,449 @@ select ag.AgenciaId, o.IdOficina, O.Nombre
 from sgf_agencia as ag
 inner join sgf_oficina as o on ag.AgenciaId = o.AgenciaId
 where ag.BancoId = 11 and ag.Activo  = 1
+
+update sgf_oficina 
+set Nombre = 'AG PUENTE PIEDRA'
+where IdOficina = 451
+
+update sgf_oficina 
+set Nombre = 'AG COMAS'
+where IdOficina = 452
+
+update sgf_oficina 
+set Nombre = 'AG LOS OLIVOS'
+where IdOficina = 453
+
+update sgf_oficina 
+set Nombre = 'AG VENTANILLA'
+where IdOficina = 454
+
+update sgf_oficina 
+set Nombre = 'AG PROCERES'
+where IdOficina = 455
+
+update sgf_oficina 
+set Nombre = 'AG SAN JUAN DE LURIGANCHO'
+where IdOficina = 456
+
+update sgf_oficina 
+set Nombre = 'AG VILLA EL SALVADOR'
+where IdOficina = 457
+
+update sgf_oficina 
+set Nombre = 'AG SAN JUAN DE MIRAFLORES'
+where IdOficina = 464
+
+update sgf_oficina 
+set Nombre = 'AG HUACHIPA'
+where IdOficina = 465
+
+update sgf_oficina 
+set Nombre = 'AG LURIN'
+where IdOficina = 466
+
+update sgf_oficina 
+set Nombre = 'AG CERCADO'
+where IdOficina = 467
+
+update sgf_oficina 
+set Nombre = 'AG CERRO COLORADO'
+where IdOficina = 468
+
+update sgf_oficina 
+set Nombre = 'AG AVELINO'
+where IdOficina = 469
+
+update sgf_oficina 
+set Nombre = 'AG MIRAFLORES'
+where IdOficina = 470
+
+update sgf_oficina 
+set Nombre = 'AG CASTILLA'
+where IdOficina = 471
+
+update sgf_oficina 
+set Nombre = 'AG PIURA CENTRO'
+where IdOficina = 472
+
+update sgf_oficina 
+set Nombre = 'AG SULLANA'
+where IdOficina = 473
+
+select  AdvId from SGF_ExpedienteCredito where expedienteCreditoId = 708149
+
+exec SGC_SP_Oficina_Banco_G 3
+
+Select  Android_VersionCode [AndroidVersionCode], * from SGF_VariablesNegocio
+
+select top(2) IdOficina,  * from SGF_Oficina
+select top(2) * from SGF_Agencia
+
+SELECT o.IdOficina, o.Nombre, ag.BancoId, o.CorreoA
+from sgf_agencia as ag
+inner join sgf_oficina as o on ag.AgenciaId = o.AgenciaId
+where ag.Activo = 1 and o.Activo = 1 and ag.bancoId = 11
+
+select FechaDescarga, * from sgf_expedientecredito where expedientecreditoId in (707865)
+
+
+update sgf_expedientecredito
+set FechaDescarga = null
+where ExpedienteCreditoId IN (
+  708182
+,687381
+,708179
+,708120
+,708140 	
+,708084
+,708127
+)
+
+update sgf_expedientecredito
+set FechaDescarga = null
+where ExpedienteCreditoId IN (
+707865
+)
+
+sele
+
+(SELECT DocumentoNum 
+FROM SGF_Persona C                                                                                           
+  inner join SGF_Evaluaciones E on E.PersonaId = C.PersonaId and EC.ExpedienteCreditoId = E.ExpedienteCreditoId                                                                                        
+  where E.TipoPersonaId = 2)
+
+SELECT PersonaId,TipoPersonaId,* from SGF_Evaluaciones where ExpedienteCreditoId = 708134
+
+select * from sgf_expedientecredito where expedientecreditoId = 
+
+select * from sgf_oficina where IdOficina = 466
+
+update sgf_oficina set Nombre = 'AG CERRO COLORADO' where IdOficina = 467
+
+AG CERRO COLORADO
+
+jhonnatan.zuni@surgir.com.pe,walter.bustamante@surgir.com.pe,erika.fernandez@surgir.com.pe
+marco.escudero@surgir.com.pe,elvia.valdivia@surgir.com.pe,cesar.vilca@surgir.com.pe
+
+
+-- Comas
+update SGF_Oficina 
+set CorreoA = 'cpadilla@surgir.com.pe,alexal.lopez@surgir.com.pe'
+where IdOficina = 452
+
+-- Avelino
+update SGF_Oficina 
+set CorreoA = 'wilar.carrillo@surgir.com.pe,roger.loraico@surgir.com.pe'
+where IdOficina = 469
+
+
+
+select * from SGF_Oficina where IdOficina in (452,469)
+
+select EstadoExpedienteId, EstadoProcesoId, * from SGF_ExpedienteCredito where ExpedienteCreditoId = 708071
+
+update SGF_ExpedienteCredito
+set EstadoExpedienteId = 1
+where ExpedienteCreditoId = 708122
+
+select top(1000) EstadoExpedienteId, EstadoProcesoId, *
+from SGF_ExpedienteCredito
+where EstadoProcesoId = 6
+order by ExpedienteCreditoId desc
+
+select * from SGF_Evaluaciones where ExpedienteCreditoId = 708071
+
+update SGF_Evaluaciones
+set ResultadoId = 3
+where ExpedienteCreditoId = 708071
+
+select * from SGB_Banco where Activo = 1
+
+update sgb_banco
+set RespConvenio = 'Reynaldo y Francisco'
+where BancoId = 3
+
+
+update sgb_banco
+set RespConvenio = 'Reynaldo'
+where BancoId = 11
+
+update sgb_banco
+set MailResponsable = 'reynaldocauche@gmail.com'
+where BancoId = 12
+
+select FechaDescarga,BancoId, * 
+From sgf_expedientecredito
+where expedientecreditoid IN (
+1055076,
+1058154,
+1060304,
+1060339,
+1060296,
+1060108,
+1059765)
+
+EXEC SGC_SP_Derivaciones_Banco_Report_L_Web_2 2,2023,11,0,0,0,0,1,0,0
+
+
+EXEC SGC_SP_Derivaciones_Banco_Report_L_Web 1,2023,11,0,0,0,0,1,1,0
+
+update sgf_expedientecredito
+set FechaDescarga = '2023-02-01 08:00:01.373'
+where expedientecreditoid IN (
+1055076,
+1058154,
+1060304,
+1060339,
+1060296,
+1060108,
+1059765)
+
++
+select FechaDescarga, * from SGF_ExpedienteCredito where ExpedienteCreditoId = 708129
+
+update SGF_ExpedienteCredito
+set FechaDescarga = null
+where ExpedienteCreditoId = 708129
+2023-01-24 12:10:56.580
+
+select * from sgf_persona where DocumentoNum = '10504825'
+
+select * from SGF_DatosDireccion where PersonaId = 608760
+update SGF_DatosDireccion
+set TipoDireccionId = 2
+where DatosDireccionId = 808594
+
+EXEC
+
+
+select top(100) Nombres, DocumentoNum,Celular, * from sgf_user order by UserId Desc
+
+select top(100) TipoDireccionId, * from SGF_DatosDireccion order by DatosDireccionId DESC  
+
+UPDATE SGF_ExpedienteCredito
+set FechaDescarga = null
+where ExpedienteCreditoId in (708065,708141)
+
+SELECT TitularId, *
+from SGF_ExpedienteCredito
+where ExpedienteCreditoId in (708065)
+
+608870
+609012
+
+select * from SGF_DatosDireccion where PersonaId in (607542)
+
+DELETE FROM SGF_DatosDireccion WHERE DatosDireccionId = 808456
+
+select * from SGF_UBIGEO where CodUbigeo = '020702'
+
+SGC_SP_Derivaciones_Banco_Report_L2
+
+EXEC SGC_SP_Derivaciones_Banco_Report_L 12,2022,3,0,0,1
+
+--15SEC
+EXEC SGC_SP_Derivaciones_Banco_Report_L 2,2023,11,0,0,1
+
+select (
+  SELECT ISNULL(sdd.Direccion,'re') as ddnegocio  FROM SGF_DatosDireccion as sdd where sdd.PersonaId =608870 And sdd.TipoDireccionId = 3
+) as ddnegocio
+
+select * from sgb_banco where activo = 1
+
+
+select FechaInforme, * from sgf_expedientecredito where expedientecreditoid in (708197,708114)
+x|
+update sgf_expedientecredito
+set fechaInforme = null
+where expedientecreditoid in (708197,708114)
+
+select FechaDescarga,FechaEvaluacion, * from sgf_expedientecredito where expedientecreditoid = 1065539
+
+exec SGC_SP_BancoInforme_L 12,0
+
+select FechaInforme, * from sgf_ExpedienteCredito where ExpedienteCreditoId in (708253,708259,708251,708304)
+
+select top(10) * from SGF_ExpedienteCreditoDetalle  order by expedienteCreditoId desc
+
+
+SELECT TitularId,EstadoProcesoId,EstadoExpedienteId ,Observacion,UserIdActua,FechaRechazado,FechaActua,SolicitudId,* 
+FROM SGF_ExpedienteCredito where ExpedienteCreditoId IN (702647
+,704913
+,708186
+,708229)
+
+select EstadoPersonaId,UserIdActua, FechaActua, * from sgf_persona where PersonaId in (604833
+,606590
+,608722
+,609115)
+
+select MontoEfectivoApro,
+FechaActua,
+FechaAprobacion,
+UserIdActua,
+MontoAprobado,
+CuotaNumero,* from SGF_Solicitud where SolicitudId IN (180646
+,181850
+,382418
+,382453
+)
+
+
+
+    UPDATE SGF_Solicitud    
+            SET MontoEfectivoApro = @Monto,    
+                FechaActua = dbo.getdate(),    
+                FechaAprobacion = dbo.getdate(),    
+                UserIdActua = 3588,    
+                MontoAprobado = ISNULL(MontoMaterialApro, 0) + @Monto,    
+                CuotaNumero = 0    
+
+
+SELECT * FROM SGF_ExpedienteCreditoDetalle where ExpedienteCreditoId = 708229
+
+SELECT * FROM SGF_ExpedienteCreditoDetalle where ExpedienteCreditoId = 707947
+
+
+Cliente pasa a DESISTIÓ según correo de MiBanco - Fecha 03/03/23 12:58:23
+
+Cliente pasa a RECHAZADO según correo de MiBanco - Fecha - 03/03/23 13:02:51 - No califica por comportamiento de pago
+
+Cliente pasa a RECHAZADO según correo de MiBanco - Fecha - 03/03/23 13:04:35 - No califica por comportamiento de pago
+
+Cliente pasa a RECHAZADO según correo de MiBanco - Fecha 03/03/23 13:04:35
+
+select CuotaMonto,CuotaNumero, * from SGF_Solicitud  where SolicitudId = 382123
+
+select FechaDescarga, * from SGF_ExpedienteCredito where expedientecreditoid in (
+  1072707
+,1073916
+,1073317
+,1072461
+,1073894
+)
+
+selec
+
+-- Tabla facturas, boletas
+
+select * from public.factura limit 2
+
+select top(10000) FechaActivado,FechaProceso,FechaCorreo, * from sgf_expedientecredito order by expedientecreditoid desc WHERE isnull(FechaCorreo, '') != '' where expedi
+
+select * fr
+
+ALTER TABLE sgf_expedientecredito
+ADD FechaProceso DATETIME
+
+
+ALTER TABLE sgf_expedientecredito
+ADD FechaCorreo DATETIME
+
+ALTER TABLE sgf_expedientecredito
+DROP COLUMN FechaCorreo
+
+
+UPDATE sgf_expedientecredito
+SET FechaActivado = dbo.getDate()
+WHERE ExpedienteCreditoId = 707797
+
+select FechaDesistio, * from SGF_ExpedienteCredito where ExpedienteCreditoId = 707735
+select * from SGF_ExpedienteCreditoDetalle where ExpedienteCreditoId = 707735
+
+RECHAZADO - No Califica - No Cumple Perfil - según correo de MiBanco - Fecha 08/03/23 14:37:43
+RECHAZADO - No Califica - No Cumple Perfil - según correo de MiBanco - Fecha 08/03/23 14:41:45
+
+No desea oferta – Tasa alta - según correo de MiBanco Fecha 08/03/23 14:37:42
+RECHAZADO CRM Mi Banco según correo de MiBanco - Fecha 08/03/23 14:37:42
+
+UPDATE SGF_ExpedienteCredito SET EstadoExpedienteId = 1, EstadoProcesoId = 4  where ExpedienteCreditoId = 416639
+
+707735
+
+
+707819
+
+select * from sgf_persona where documentonum = '70218553'
+
+exec SGC_SP_ExpedienteCredito_Por_Id2 607103
+
+SELECT * FROM SGF_Evaluaciones where ExpedienteCreditoId = 708448
+
+select * from SGF_ExpedienteCreditoDetalle where ExpedienteCreditoId = 607103
+
+select * from SGF_ExpedienteCredito where ExpedienteCreditoId = 597233
+
+
+exec SGC_SP_BancoInforme_L 3,0
+
+select * from SGF_APDP
+
+select * from sgf_persona where personaid = 609174
+
+select dbo.getDate()
+
+-- 20452121211
+
+2023-03-18 05:27:00.560
+2023-03-20 02:33:58.827
+
+select top(1000) APDP, PubliAPDP, * from sgf_persona
+ORDER BY PersonaId desc
+
+select * from sgf_persona where PersonaId = 166311
+update SGF_Persona set PubliAPDP = 1, APDP = 0 where PersonaId = 166311
+
+SELECT * FROM SGF_ExpedienteCredito where TitularId = 609174
+exec SGC_SP_ExpedienteCredito_Por_Id 708189
+
+select * from SGF_ExpedienteCredito where ExpedienteCreditoId = 708189
+
+select TOP(1000) TitularId, * from SGF_ExpedienteCredito order by ExpedienteCreditoId desc
+
+select Celular, Celular2,Telefonos, * from SGF_Persona where PersonaId = 609198
+
+select count(personaid) from SGF_Persona where Celular = '910910910' AND PERSONAID != 609146
+
+
+select count(personaid) from SGF_Persona where Celular2 = '910910911' AND PERSONAID != 609146
+
+select TOP(1) isnull(Telefonos,'') from SGF_Persona where Telefonos = '2603212'
+
+select top(1) isnull(Celular,'')  from SGF_Persona where Celular in ('900600301',IIF('910910911' = '','--','910910911')) and PersonaId != 609146
+
+select count(personaid) from SGF_Persona where Celular2 in ('900600301',IIF('910910910' = '','--','910910910')) and PersonaId != 609146
+
+select BancoId,SolicitudId, * from sgf_expedientecredito where expedientecreditoid in (1090608)
+
+select * from sgf_expedientecreditodetalle where expedientecreditoid in (1090608)
+
+select MontoEfectivoApro,* from SGF_Solicitud where SolicitudId in (286719)
+
+select top(100) * from SGF_ExpedienteCredito where BancoId = 11 and EstadoProcesoId = 8  order by ExpedienteCreditoId desc
+
+select * from sgf_expedientecredito where expedientecreditoid = 708448
+
+select * from sgf_persona where DocumentoNum = '43261919'
+
+exec SGC_SP_Person_APDP_U '43261919',1,'123.42244','Samsung Galaxy A20','Chrome',1,1,0,''
+
+select * from SGF_APDP where PersonaId
+
+ @APDP bit,         
+ @IpAPDP  varchar(15),         
+ @ModeloDispositivoAPDP  varchar(50),         
+ @NavegadorAPDP  varchar(50),         
+ @PubliAPDP bit,
+ @MedioAutorizacion int = 0,   
+ @Success int OUTPUT,                                           
+ @Message varchar(8000) OUTPUT    
+
+select top(1000) apdp,PubliAPDP, * from sgf_persona where PersonaId = 609238
+update sgf_persona set PubliAPDP = 1 where  PersonaId = 609238
+-- order by PersonaId desc 
+where PersonaId = 727450
+
+select top(100) * from SGF_APDP 
+
+select * from sgf_expediente
