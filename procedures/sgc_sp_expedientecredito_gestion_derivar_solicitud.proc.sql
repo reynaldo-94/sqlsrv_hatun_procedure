@@ -8,6 +8,7 @@
   22/12/2022 - Reynaldo Cauche - Se creo el procedimiento    
   13/04/2022 - Reynaldo Cauche - Se agrego validacion para los campos apdp y publiApdp 
   17/04/2022 - Reynaldo Cauche - Se removio la validacion de publiApdp
+  19/04/2022 - Reynaldo Cauche - Cuando es Ruc que no valide el campo apdp
 '--------------------------------------------------------------------------------------*/                                                                                          
                                                                                       
 ALTER PROCEDURE SGC_SP_ExpedienteCredito_Gestion_Derivar_Solicitud                           
@@ -28,6 +29,7 @@ as
     declare @efectivopro int                                  
     declare @efectivo int
     declare @apdp bit
+    declare @documentoNum varchar(15)
 BEGIN TRY                                           
     BEGIN TRANSACTION                                                        
                                                              
@@ -38,6 +40,7 @@ BEGIN TRY
         SET @status = (select sec.EstadoProcesoId from SGF_ExpedienteCredito sec where sec.ExpedienteCreditoId = @ExpedienteCreditoId);   
         SET @titularId = (select sec.TitularId from SGF_ExpedienteCredito sec where sec.ExpedienteCreditoId = @ExpedienteCreditoId);   
         SET @personaId = (select sp.TipoPersonaId from SGF_Persona sp WHERE  sp.PersonaId = @titularId);    
+        SET @documentoNum = (select isnull(DocumentoNum,'') from sgf_persona WHERE  PersonaId = @titularId)
         SET @estadoCivilId = (select isnull(count(sp.PersonaId),0) from SGF_Persona sp WHERE  sp.PersonaId = @titularId);    
         SET @estadoCivilValue = (select sp.ParametroId from SGF_Parametro sp where sp.DominioId = 8 and sp.ParametroId = @estadoCivilId);   
         SET @valueCasaPropia = (select isnull(sp.CasaPropia,0) from SGF_Persona sp WHERE  sp.PersonaId = @titularId);    
@@ -48,7 +51,7 @@ BEGIN TRY
         set @efectivo = (select isnull(count(isnull(ss.MontoEfectivoApro ,0)),0) from SGF_Solicitud ss where ss.SolicitudId = @solicitud)
         SET @apdp = (SELECT isnull(APDP,0) from SGF_Persona where PersonaId = @titularId )
 
-        if @apdp != 1
+        if (len(@documentoNum) = 8 or len(@documentoNum) = 12) and @apdp != 1
             BEGIN                                                      
                 SET @Success = 2;                                                      
                 SET @Message = 'Falta completar autorización de datos personales'                                                      

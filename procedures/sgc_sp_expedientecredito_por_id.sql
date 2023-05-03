@@ -136,11 +136,8 @@ BEGIN
  INNER join SGF_Evaluaciones se on se.ExpedienteCreditoId = sec.ExpedienteCreditoId               
  INNER join SGF_Persona sp on sp.PersonaId = se.PersonaId               
  INNER join SGF_DatosDireccion sdd on sdd.PersonaId = sp.PersonaId and sdd.TipoDireccionId=1               
- left join SGF_DatosLaborales sdl on sdl.PersonaId = sp.PersonaId             left join SGF_DatosDireccion sddt on sddt.DatosDireccionId = (select top 1 DatosDireccionId from SGF_DatosDireccion WHERE personaId = sp.PersonaId AND tipoDireccionId IN (2,3))
-  
-  
-   
-               
+ left join SGF_DatosLaborales sdl on sdl.PersonaId = sp.PersonaId
+ left join SGF_DatosDireccion sddt on sddt.DatosDireccionId = (select top 1 DatosDireccionId from SGF_DatosDireccion WHERE personaId = sp.PersonaId AND tipoDireccionId IN (2,3))
  left join SGF_Parametro sp2 on sp2.ParametroId = sp.EstadoCivilId and sp2.DominioId=8               
  left join SGF_Parametro sp3 on sp3.ParametroId = sec.EstadoProcesoId and sp3.DominioId=38                                                                              
  left join SGF_Parametro sp4 on sp4.ParametroId = se.TipoPersonaId and sp4.DominioId=6                                                         

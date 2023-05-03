@@ -1161,4 +1161,111 @@ where PersonaId = 727450
 
 select top(100) * from SGF_APDP 
 
-select * from sgf_expediente
+select * from sgf_persona where DocumentoNum = '10504825'
+
+EXEC SGC_SP_PortfolioPerson_Operacion_Por_Id 608760
+--885709
+
+SELECT * 
+FROM SGF_USER su 
+INNER JOIN SGF_Supervisor ss on ss.IdSupervisor = su.EmpleadoId 
+where su.UserId = @UserId
+
+select * from sgf_supervisor where IdSupervisor = 1294
+select * from sgf_user where empleadoid = 1294
+
+select * from SGF_ExpedienteCredito where TitularId = 885709
+
+select top(1) * from sgb_banco
+
+select TitularId, * from sgf_expedientecredito where ExpedienteCreditoId = 708200
+
+select TipoPersonaId,DocumentoNum,* from sgf_persona where Personaid = 609004
+
+20603614748
+
+select SolicitudId, * from sgf_expedientecredito where expedientecreditoid in (1076499,1072461)
+
+select * from sgf_solicitud where solicitudId in (282908,282161)
+
+exec SGC_SP_ExpedienteCredito_Gestion_Derivar_Solicitud 708406,0,'',''
+exec SGC_SP_ResultLoading_Validation 11,
+
+select count(UserId) from sgf_user where UserLogin = '73999345' and UserPassword = '0e7bd1c05526f5cf7d97ed8e4e69aee4815e5ce6'
+
+
+select UserLogin, UserPassword, EmailEmpresa, * from sgf_user  where UserLogin like '%45503400%'
+
+'Admin'
+
+update sgf_user set UserLogin = '45503400' where UserLogin like '%admin%'
+
+select *from sgf_persona where DocumentoNum = '45503400'
+
+f0345c8fd25fb1c2085db1477e067b426f2040a4
+
+
+f0345c8fd25fb1c2085db1477e067b426f2040a4
+
+8DRcj9JfscIIXbFHfgZ7Qm8gQKQ=
+
+"QL0AFWMIX8NRZTKeof9cXsvbvu8="
+
+-----
+40bd001563085fc35165329ea1ff5c5ecbdbbeef
+
+40bd001563085fc35165329ea1ff5c5ecbdbbeef
+
+QL0AFWMIX8NRZTKeof9cXsvbvu8=
+
+
+SELECT TOP(1) EXPE.ExpedienteCreditoId,     
+        IIF( isnull(SOL.MontoAprobado,0)=0,isnull(SOL.MontoPropuesto,0),MontoAprobado) [Monto],    
+        EXPE.EstadoProcesoId [EstadoId],     
+        PAR.NombreLargo [NombreEstado],     
+        convert(VARCHAR,EXPE.FechaActua,3) [FechaActua],         
+        convert(VARCHAR,EXPE.FechaCrea,3) [FechaCrea],        
+        EXPE.BancoId,     
+        BA.Nombre [NombreBanco],        
+        PER.Nombre +' '+ PER.ApePaterno+' '+PER.ApeMaterno [Nombres],
+        ISNULL(SP.Nombre +' '+ SP.ApePaterno+' '+SP.ApeMaterno, 'CONTACT CENTER') [NombreSupervisor],        
+        ISNULL(USR.Celular,'966575476') [CelularSupervisor],
+        PER.DocumentoNum [DocumentoNum]
+    FROM SGF_ExpedienteCredito EXPE     
+    LEFT JOIN SGF_Solicitud SOL ON SOL.SolicitudId = EXPE.SolicitudId     
+    INNER JOIN SGF_Persona PER ON PER.PersonaId = EXPE.TitularId     
+    LEFT JOIN SGF_Parametro PAR ON PAR.ParametroId = EXPE.EstadoProcesoId AND PAR.DominioId = 38     
+    LEFT JOIN SGB_Banco BA ON BA.BancoId = EXPE.BancoId
+    LEFT JOIN SGF_Supervisor SP ON SP.IdSupervisor = EXPE.IdSupervisor
+    LEFT JOIN SGF_User USR ON USR.EmpleadoId = SP.IdSupervisor and USR.CargoId = 29
+    WHERE EXPE.TitularId = '45503400'     
+    ORDER BY EXPE.ExpedienteCreditoId DESC   
+
+
+
+select top(10) * from sgf_documentoAdjunto where ExpedienteCreditoId = 708504
+
+select top(10) * from sgf_dominio where nombre like '%Medio%' 
+
+select* from sgf_dominio where DominioId = 49 
+
+select * from SGF_Parametro where DominioId = 49
+
+select * from SGF_Parametro where DominioId = 143
+
+select * from SGF_APDP
+
+select * from sgf_persona where documentonum = '48078633'
+
+-- 602923
+
+select * from sgf_apdp where personaid = 609271
+
+
+insert into sgf_parametro (DominioId, ParametroId, NombreLargo, NombreCorto, IndicadorActivo, UserIdCrea, FechaCrea)
+values (49, 14, 'Autorizacion de Datos', 'Autorizacion de Datos', 1, 1, dbo.getDate())
+
+insert into sgf_parametro (DominioId, ParametroId, NombreLargo, NombreCorto, IndicadorActivo, UserIdCrea, FechaCrea)
+values (49, 15, 'DNI Reverso', 'DNI Reverso', 1, 1, dbo.getDate())
+
+select top(2) * from sgf_expedientecreditodetalle

@@ -3,7 +3,9 @@
 ' Objetivo        :                                
 ' Creado Por      : FRANCISCO LAZARO                                                                   
 ' Día de Creación : 28-02-2022                                                                                              
-' Requerimiento   : SGC                                                                                  
+' Requerimiento   : SGC
+' Cambios:           
+  21/04/2022 - REYNALDO CAUCHE - Para el caso de Surgir se cambio de Left Join sgf_user a Inner join                                                                         
 '--------------------------------------------------------------------------------------*/                             
 ALTER PROCEDURE [dbo].[SGC_SP_ResultLoading_Validation]            
 (@BancoId int,            
@@ -81,7 +83,7 @@ BEGIN
 					   (UPPER(B.Estado) in ('EVALUACION', 'PENDIENTE', '') and EXPC.EstadoProcesoId not in (5)), 'OP se encuentra en estado ' + EST.NombreLargo,            
                        IIF(UPPER(B.Estado) in ('EVALUACION', 'PENDIENTE', '') and EXCD.ItemId IS NOT NULL, 'Comentario ya Agregado anteriormente',           
                            IIF(UPPER(B.Estado) not in ('DESEMBOLSADO', 'DESISTIO', 'RECHAZADO', 'EVALUACION', 'PENDIENTE', ''), 'Estado no válido',           
-                               IIF(EXPC.ExpedienteCreditoId is NULL, 'NOP no válido', 'Correcto')))))[Observacion],             
+                               IIF(EXPC.ExpedienteCreditoId is NULL, 'NOP no válido', 'Correcto')))))[Observacion],
                IIF(EXPC.BancoId <> @BancoId, 0,             
                    IIF((UPPER(B.Estado) = 'DESEMBOLSADO' and EXPC.EstadoProcesoId not in (5, 9, 10, 16)) or             
                        (UPPER(B.Estado) = 'DESISTIO' and EstadoProcesoId not in (5)) or             
@@ -89,17 +91,17 @@ BEGIN
 					   (UPPER(B.Estado) in ('EVALUACION', 'PENDIENTE', '') and EXPC.EstadoProcesoId not in (5)), 0,            
                        IIF(UPPER(B.Estado) in ('EVALUACION', 'PENDIENTE', '') and EXCD.ItemId IS NOT NULL, 0,          
                            IIF(UPPER(B.Estado) not in ('DESEMBOLSADO', 'DESISTIO', 'RECHAZADO', 'EVALUACION', 'PENDIENTE', ''), 0,           
-                           IIF(EXPC.ExpedienteCreditoId is NULL, 0, 1)))))[EsValido]     
-      FROM @TABLEEXPCRED A          
+                           IIF(EXPC.ExpedienteCreditoId is NULL, 0, 1)))))[EsValido]
+        FROM @TABLEEXPCRED A          
         LEFT JOIN @TABLEESTADO B ON A.Id = B.Id          
-       LEFT JOIN SGF_ExpedienteCredito EXPC ON A.ExpedienteCreditoId = EXPC.ExpedienteCreditoId          
+        LEFT JOIN SGF_ExpedienteCredito EXPC ON A.ExpedienteCreditoId = EXPC.ExpedienteCreditoId          
         LEFT JOIN SGF_Persona PER ON EXPC.TitularId = PER.PersonaId        
         LEFT JOIN SGF_Parametro EST on EXPC.EstadoProcesoId = EST.ParametroId and EST.DominioId = 38          
         LEFT JOIN (SELECT EXCD.ExpedienteCreditoId, MAX(ItemId)[ItemId]          
                    FROM @TABLEEXPCRED A          
                    INNER JOIN @TABLEESTADO B ON A.Id = B.Id          
                    INNER JOIN SGF_ExpedienteCreditoDetalle EXCD ON A.ExpedienteCreditoId = EXCD.ExpedienteCreditoId          
-                   LEFT  JOIN SGF_USER US ON EXCD.UsuarioId = US.UserId and US.CargoId = 48 and US.IsActive = 1           
+                   INNER  JOIN SGF_USER US ON EXCD.UsuarioId = US.UserId and US.CargoId = 48 and US.IsActive = 1           
                    where UPPER(EXCD.Observacion) like IIF(B.Estado = '', 'NO CONTACTADO%', UPPER(B.Estado + '%'))          
                    GROUP BY EXCD.ExpedienteCreditoId) EXCD ON A.ExpedienteCreditoId = EXCD.ExpedienteCreditoId            
         ORDER BY A.ExpedienteCreditoId desc              
