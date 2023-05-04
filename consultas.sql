@@ -1243,7 +1243,13 @@ SELECT TOP(1) EXPE.ExpedienteCreditoId,
 
 
 
-select top(10) * from sgf_documentoAdjunto where ExpedienteCreditoId = 708504
+select count(*) from sgf_documentoAdjunto where ExpedienteCreditoId = 708422 and TipoDocumentoAdjuntoId =14
+
+select *from sgf_expedientecredito where ExpedienteCreditoId = 708422
+
+select APDP, PubliAPDP, * from SGF_Persona where PersonaId = 609217
+
+update SGF_Persona set apdp = 0, PubliAPDP = 0 where PersonaId = 609217
 
 select top(10) * from sgf_dominio where nombre like '%Medio%' 
 
@@ -1269,3 +1275,13 @@ insert into sgf_parametro (DominioId, ParametroId, NombreLargo, NombreCorto, Ind
 values (49, 15, 'DNI Reverso', 'DNI Reverso', 1, 1, dbo.getDate())
 
 select top(2) * from sgf_expedientecreditodetalle
+
+
+select * from sgf_persona where DocumentoNum = '000708332'
+
+select top 1 DocumentoNum from SGF_Persona where DocumentoNum ='000708332'
+
+select len('000708332')
+71710143
+
+select FechaCrea, *from sgf_persona where len(DocumentoNum) = 9

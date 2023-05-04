@@ -6,9 +6,10 @@
 ' Requerimiento   : SGC                                                                                                                                                
 ' Cambios:                        
   22/12/2022 - Reynaldo Cauche - Se creo el procedimiento    
-  13/04/2022 - Reynaldo Cauche - Se agrego validacion para los campos apdp y publiApdp 
-  17/04/2022 - Reynaldo Cauche - Se removio la validacion de publiApdp
-  19/04/2022 - Reynaldo Cauche - Cuando es Ruc que no valide el campo apdp
+  13/04/2023 - Reynaldo Cauche - Se agrego validacion para los campos apdp y publiApdp 
+  17/04/2023 - Reynaldo Cauche - Se removio la validacion de publiApdp
+  19/04/2023 - Reynaldo Cauche - Cuando es Ruc que no valide el campo apdp
+  04/05/2023 - Reynaldo Cauche - Si tiene documento adjunto tipo 14(autorizacion) no valida la autorizacion dedatos
 '--------------------------------------------------------------------------------------*/                                                                                          
                                                                                       
 ALTER PROCEDURE SGC_SP_ExpedienteCredito_Gestion_Derivar_Solicitud                           
@@ -30,6 +31,7 @@ as
     declare @efectivo int
     declare @apdp bit
     declare @documentoNum varchar(15)
+    declare @documentoAdjuntoAutorizacion int
 BEGIN TRY                                           
     BEGIN TRANSACTION                                                        
                                                              
@@ -50,8 +52,9 @@ BEGIN TRY
         set @efectivopro = (select isnull(count(isnull(ss.MontoEfectivoPro ,0)),0) from SGF_Solicitud ss where ss.SolicitudId = @solicitud)                                                      
         set @efectivo = (select isnull(count(isnull(ss.MontoEfectivoApro ,0)),0) from SGF_Solicitud ss where ss.SolicitudId = @solicitud)
         SET @apdp = (SELECT isnull(APDP,0) from SGF_Persona where PersonaId = @titularId )
+        SET @documentoAdjuntoAutorizacion = (SELECT count(*) FROM sgf_documentoAdjunto where ExpedienteCreditoId = @ExpedienteCreditoId and TipoDocumentoAdjuntoId = 14)
 
-        if (len(@documentoNum) = 8 or len(@documentoNum) = 12) and @apdp != 1
+        if (len(@documentoNum) = 8 or len(@documentoNum) = 12) and (@documentoAdjuntoAutorizacion = 0 and @apdp != 1)
             BEGIN                                                      
                 SET @Success = 2;                                                      
                 SET @Message = 'Falta completar autorización de datos personales'                                                      
